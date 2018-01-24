@@ -103,18 +103,26 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
     }
 
     public void resetSizes(String maxValue) {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+
+        CharSequence originalText = mNumber.getText();
+
         //Account for negative numbers... is there any proper way of getting the biggest string between our range????
         mNumber.setText("-" + maxValue);
+
         //Do a first forced measure call for the TextView (with the biggest text content),
         //to calculate the max width and use always the same.
         //this avoids the TextView from shrinking and growing when the text content changes
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         int wSpec = MeasureSpec.makeMeasureSpec(displayMetrics.widthPixels, MeasureSpec.AT_MOST);
         int hSpec = MeasureSpec.makeMeasureSpec(displayMetrics.heightPixels, MeasureSpec.AT_MOST);
         mNumber.measure(wSpec, hSpec);
+
         mWidth = Math.max(mNumber.getMeasuredWidth(), mNumber.getMeasuredHeight());
+
         removeView(mNumber);
         addView(mNumber, new FrameLayout.LayoutParams(mWidth, mWidth, Gravity.LEFT | Gravity.TOP));
+
+        mNumber.setText(originalText);
     }
 
     @Override
