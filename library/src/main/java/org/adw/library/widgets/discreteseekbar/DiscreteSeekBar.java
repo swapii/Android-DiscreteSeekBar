@@ -269,7 +269,7 @@ public class DiscreteSeekBar extends View {
 
 
         if (!editMode) {
-            mIndicator = new PopupIndicator(context, attrs, defStyleAttr, convertValueToMessage(mMax),
+            mIndicator = new PopupIndicator(context, attrs, defStyleAttr, convertValueToMessage(getAbsoluteMaximum()),
                     thumbSize, thumbSize + mAddedTouchBounds + separation);
             mIndicator.setListener(mFloaterListener);
         }
@@ -512,9 +512,9 @@ public class DiscreteSeekBar extends View {
     private void updateIndicatorSizes() {
         if (!isInEditMode()) {
             if (mNumericTransformer.useStringTransform()) {
-                mIndicator.updateSizes(mNumericTransformer.transformToString(mMax));
+                mIndicator.updateSizes(mNumericTransformer.transformToString(getAbsoluteMaximum()));
             } else {
-                mIndicator.updateSizes(convertValueToMessage(mNumericTransformer.transform(mMax)));
+                mIndicator.updateSizes(convertValueToMessage(mNumericTransformer.transform(getAbsoluteMaximum())));
             }
         }
 
@@ -563,6 +563,10 @@ public class DiscreteSeekBar extends View {
      * </p>
      */
     protected void onValueChanged(int value) {
+    }
+
+    private int getAbsoluteMaximum() {
+        return Math.max(Math.abs(mMin), Math.abs(mMax));
     }
 
     private void updateKeyboardRange() {
